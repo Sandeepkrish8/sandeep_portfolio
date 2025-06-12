@@ -1,53 +1,84 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link as ScrollLink } from "react-scroll";
-import { FaBars, FaTimes, FaMoon, FaSun, FaDownload } from "react-icons/fa";
+import {
+  FaBars, FaTimes, FaMoon, FaSun,
+  FaDownload, FaCircle
+} from "react-icons/fa";
 
 const navLinks = ["Home", "About", "Skills", "Projects", "Contact"];
 
-function Header() {
+const Header = () => {
   const [isMobileOpen, setMobileOpen] = useState(false);
   const [active, setActive] = useState("home");
   const [darkMode, setDarkMode] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  const toggleTheme = () => setDarkMode(!darkMode);
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "🌅 Good Morning!";
+    if (hour < 18) return "☀️ Good Afternoon!";
+    return "🌙 Good Evening!";
+  };
 
   useEffect(() => {
     document.body.style.background = darkMode ? "#121212" : "#fff";
     document.body.style.color = darkMode ? "#eee" : "#000";
+
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.body.scrollHeight - window.innerHeight;
+      const scrollPercent = (scrollTop / docHeight) * 100;
+      setScrollProgress(scrollPercent);
+    };
+
+    const handleOnlineStatus = () => setIsOnline(navigator.onLine);
+
+    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("online", handleOnlineStatus);
+    window.addEventListener("offline", handleOnlineStatus);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("online", handleOnlineStatus);
+      window.removeEventListener("offline", handleOnlineStatus);
+    };
   }, [darkMode]);
 
-  const toggleTheme = () => setDarkMode(!darkMode);
-
   return (
-    <header
-      style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 999,
-        background: darkMode ? "#1e1e1e" : "#ffffff",
-        color: darkMode ? "#eee" : "#1a1a40",
-        boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-      }}
-    >
-      <nav
+    <header style={{
+      position: "sticky", top: 0, zIndex: 999,
+      background: darkMode ? "#1e1e1e" : "#ffffff",
+      color: darkMode ? "#eee" : "#1a1a40",
+      boxShadow: "0 2px 10px rgba(0,0,0,0.1)"
+    }}>
+      {/* Scroll Progress Bar */}
+      <div
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "1rem 2rem",
-          maxWidth: "1200px",
-          margin: "0 auto",
+          height: "4px",
+          background: "#00d9ff",
+          width: `${scrollProgress}%`,
+          transition: "width 0.25s ease",
         }}
-      >
-        <div style={{ fontSize: "1.6rem", fontWeight: "bold" }}>MyPortfolio</div>
+      />
 
-        <ul
-          className="desktop-nav"
-          style={{
-            display: "flex",
-            gap: "25px",
-            listStyle: "none",
-            alignItems: "center",
-          }}
-        >
+      <nav style={{
+        display: "flex", justifyContent: "space-between",
+        alignItems: "center", padding: "1rem 2rem",
+        maxWidth: "1200px", margin: "0 auto"
+      }}>
+        {/* Logo and Greeting */}
+        <div style={{ fontSize: "1.6rem", fontWeight: "bold" }}>
+          <span role="img" aria-label="wave">👋</span> {getGreeting()}
+        </div>
+
+        {/* Desktop Nav */}
+        <ul className="desktop-nav" style={{
+          display: "flex", gap: "25px", listStyle: "none",
+          alignItems: "center"
+        }}>
           {navLinks.map((link) => (
             <li key={link}>
               <ScrollLink
@@ -62,19 +93,16 @@ function Header() {
                   fontWeight: 500,
                   position: "relative",
                   color: active === link.toLowerCase() ? "#00d9ff" : darkMode ? "#ccc" : "#1a1a40",
-                  transition: "color 0.3s",
                 }}
               >
                 {link}
-                <span
-                  style={{
-                    display: "block",
-                    height: "2px",
-                    background: "#00d9ff",
-                    width: active === link.toLowerCase() ? "100%" : "0",
-                    transition: "width 0.3s ease",
-                  }}
-                />
+                <span style={{
+                  display: "block",
+                  height: "2px",
+                  background: "#00d9ff",
+                  width: active === link.toLowerCase() ? "100%" : "0",
+                  transition: "width 0.3s ease"
+                }} />
               </ScrollLink>
             </li>
           ))}
@@ -115,9 +143,17 @@ function Header() {
               {darkMode ? <FaSun /> : <FaMoon />}
             </button>
           </li>
+
+          {/* Online Status */}
+          <li title={isOnline ? "Online" : "Offline"}>
+            <FaCircle style={{
+              color: isOnline ? "#00c853" : "#f44336",
+              fontSize: "0.8rem"
+            }} />
+          </li>
         </ul>
 
-        {/* Mobile Toggle */}
+        {/* Mobile Menu Toggle */}
         <div
           className="mobile-toggle"
           onClick={() => setMobileOpen(!isMobileOpen)}
@@ -127,16 +163,14 @@ function Header() {
         </div>
       </nav>
 
-      {/* Mobile Menu */}
+      {/* Mobile Nav Menu */}
       {isMobileOpen && (
-        <ul
-          style={{
-            background: darkMode ? "#1e1e1e" : "#f8f8f8",
-            padding: "1rem 0",
-            listStyle: "none",
-            textAlign: "center",
-          }}
-        >
+        <ul style={{
+          background: darkMode ? "#1e1e1e" : "#f8f8f8",
+          padding: "1rem 0",
+          listStyle: "none",
+          textAlign: "center"
+        }}>
           {navLinks.map((link) => (
             <li key={link} style={{ padding: "10px 0" }}>
               <ScrollLink
@@ -147,8 +181,7 @@ function Header() {
                 onClick={() => setMobileOpen(false)}
                 style={{
                   color: darkMode ? "#ccc" : "#1a1a40",
-                  textDecoration: "none",
-                  fontSize: "1.1rem",
+                  fontSize: "1.1rem"
                 }}
               >
                 {link}
@@ -178,7 +211,7 @@ function Header() {
                 border: "none",
                 fontSize: "1.3rem",
                 color: darkMode ? "#ffd700" : "#1a1a40",
-                cursor: "pointer",
+                cursor: "pointer"
               }}
             >
               {darkMode ? <FaSun /> : <FaMoon />}
@@ -187,7 +220,7 @@ function Header() {
         </ul>
       )}
 
-      {/* Responsive toggle styles */}
+      {/* Mobile responsive override styles */}
       <style>
         {`
           @media (max-width: 768px) {
@@ -202,6 +235,6 @@ function Header() {
       </style>
     </header>
   );
-}
+};
 
 export default Header;

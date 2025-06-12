@@ -17,11 +17,11 @@ const projects = [
     githubLink: "https://github.com/Sandeepkrish8/hair-growth-app",
   },
   {
-    title: "Portfolio Website",
-    description: "Responsive portfolio built using React, Framer Motion, and deployed on Vercel.",
-    image: "https://source.unsplash.com/400x300/?portfolio,web",
-    demoLink: "https://your-site.vercel.app",
-    githubLink: "https://github.com/your-portfolio",
+    title: "Todo List App",
+    description: "A simple Todo List app built with React, allowing users to add, edit, and delete tasks.",
+    image: "https://media.licdn.com/dms/image/v2/D5622AQENIBc7X2ENVQ/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1727578818185?e=2147483647&v=beta&t=nyLBcj8XvOC2O1g_481Rso9lrAkgT31XNsoVNsmH4_Y",
+    demoLink: "https://to-do-list-nine-phi-84.vercel.app/",
+    githubLink: "https://github.com/Sandeepkrish8/TO-DO-LIST",
   },
 ];
 

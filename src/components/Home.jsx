@@ -31,7 +31,11 @@ function Home() {
       transition={{ duration: 1 }}
       style={{
         minHeight: "100vh",
-        background: "linear-gradient(135deg,rgb(233, 150, 233), #fff)",
+        backgroundImage: "url('https://images.pexels.com/photos/1323550/pexels-photo-1323550.jpeg?auto=compress&cs=tinysrgb&w=600')",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "cover",
+        backgroundSize: "cover",
+        color: "#1a1a40",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -62,7 +66,8 @@ function Home() {
         style={{
           marginTop: "50px",
           fontSize: "1rem",
-          color: "#888",
+          color: "black",
+          fontWeight: "bold",
           animation: "bounce 2s infinite",
         }}
       >
